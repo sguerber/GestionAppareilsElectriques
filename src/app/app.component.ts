@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 // on importe la méthode interval () qui crée un Observable et retourne un chiffre croissant à intervalles réguliers
 // le paramètre de cette méthode est le nombre de millisecondes définissant l'intervalle
 import 'rxjs/add/observable/interval';
