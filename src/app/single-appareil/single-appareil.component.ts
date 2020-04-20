@@ -16,7 +16,7 @@ export class SingleAppareilComponent implements OnInit {
 				private route : ActivatedRoute) { }
 
   ngOnInit() { 
-        const id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params['id'];
 		this.name = this.appareilService.getAppareilById(+id).name;
 		this.status = this.appareilService.getAppareilById(+id).status;
 		// le +id caste la variable id comme nombre vu que le fragment de l'url est un string

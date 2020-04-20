@@ -1,0 +1,4 @@
+{
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "liveServer.settings.port": 5501
+    }
