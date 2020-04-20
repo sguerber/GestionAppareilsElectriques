@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {AppareilService} from '../services/appareil.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-appareil-view',
   templateUrl: './appareil-view.component.html',
   styleUrls: ['./appareil-view.component.scss']
 })
-export class AppareilViewComponent implements OnInit {
+export class AppareilViewComponent implements OnInit, OnDestroy {
 
-  isAuth=false;
   appareils: any[];
+  appareilSubscription: Subscription;
   
   // simulation de recherche d'une donnée sur un serveur
   // -> on crée une Promise disponible seulement au bout de deux secondes
@@ -22,16 +23,18 @@ export class AppareilViewComponent implements OnInit {
     );
   })
 
-  constructor(private appareilService : AppareilService) {
-	   setTimeout(
-		  () => {
-			this.isAuth = true;
-		  }, 4000
-		);
-	}
+  constructor(private appareilService : AppareilService) {}
 
+  // Dès le chargement du component on souscrit au Subject appareils de appareil.service.ts
   ngOnInit() {
-	  this.appareils = this.appareilService.appareils;
+    this.appareilSubscription = this.appareilService.appareilsSubject.subscribe(
+      // Ainsi, on récupère directement les données émises
+      (appareils: any[]) => {
+        this.appareils = appareils;
+      }
+    );
+    // Et le component émet ses premières données
+    this.appareilService.emitAppareilSubject();
   }
   
   onAllumer() {
@@ -43,6 +46,11 @@ export class AppareilViewComponent implements OnInit {
     } else {
       return null;
     }
+  }
+
+  // A la destruction du component, on détruit la souscription
+  ngOnDestroy() {
+    this.appareilSubscription.unsubscribe();
   }
 
 }
